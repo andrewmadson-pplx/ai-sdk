@@ -157,6 +157,53 @@ The tool returns structured search results. `date` and `last_updated` may be omi
 }
 ```
 
+## Agent Tool
+
+`perplexityAgent()` answers a question with Perplexity's Agent API, which searches the web and returns a cited answer. Use it when the model needs a synthesized answer rather than a list of results.
+
+```typescript
+import { perplexityAgent } from "@perplexity-ai/ai-sdk";
+import { generateText, gateway } from "ai";
+
+const { text } = await generateText({
+  model: gateway("openai/gpt-4o-mini"),
+  prompt: "Which Node.js release line is LTS right now?",
+  tools: {
+    answer: perplexityAgent(),
+  },
+});
+```
+
+The model calls the tool with a single `question` parameter. You can configure the tool:
+
+```typescript
+type PerplexityAgentConfig = {
+  apiKey?: string;  // defaults to PERPLEXITY_API_KEY
+  effort?: string;  // "low" (default), "medium" or "high"
+  model?: string;   // Agent API model ID, such as "anthropic/claude-sonnet-4-6"; by default the effort level picks the model
+};
+```
+
+The tool returns the answer and the web sources it used, with the same fields as search results plus an `id`. Citations in `text` look like `[web:1]` and match a source `id`:
+
+```typescript
+{
+  id: "resp_...",
+  model: "openai/gpt-6-luna",
+  text: "Node.js 26 is the active LTS line. [web:1]",
+  sources: [
+    {
+      id: 1,
+      title: "Node.js releases",
+      url: "https://nodejs.org/en/about/previous-releases",
+      snippet: "Content preview...",
+      date: "2026-10-28",
+      last_updated: "2026-11-01"
+    }
+  ]
+}
+```
+
 ## Development
 
 ### Setup

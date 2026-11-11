@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { perplexitySearch } from "./index";
+import { testAgent } from "./test-agent";
 import { testSearchOptions } from "./test-search-options";
 
 async function testDateFilterRequests() {
@@ -92,6 +93,7 @@ async function main() {
   }
 
   await testDateFilterRequests();
+  await testAgent();
 
   console.log("\nAll tests passed!");
   console.log("Note: To test with actual API calls, set PERPLEXITY_API_KEY in your .env file");
