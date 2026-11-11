@@ -50,3 +50,57 @@ export interface PerplexitySearchResponse {
    */
   id: string;
 }
+
+export interface PerplexityAgentConfig {
+  /**
+   * API key for authenticating requests to Perplexity Agent API.
+   * If not provided, will use PERPLEXITY_API_KEY environment variable.
+   */
+  apiKey?: string;
+
+  /**
+   * Agent API effort level, such as "low", "medium" or "high". Defaults to "low".
+   */
+  effort?: string;
+
+  /**
+   * Agent API model ID, such as "anthropic/claude-sonnet-4-6".
+   * If not provided, the effort level picks the model.
+   */
+  model?: string;
+}
+
+/**
+ * Web source the Agent API used for its answer
+ */
+export interface PerplexityAgentSource extends PerplexitySearchResult {
+  /**
+   * Source id, referenced in the answer as [web:<id>]
+   */
+  id: number;
+}
+
+/**
+ * Response from the perplexityAgent tool
+ */
+export interface PerplexityAgentResponse {
+  /**
+   * Unique identifier for this Agent API response
+   */
+  id: string;
+
+  /**
+   * Model that produced the answer
+   */
+  model: string;
+
+  /**
+   * Answer text, with citations like [web:1]
+   */
+  text: string;
+
+  /**
+   * Web sources the answer cites by id
+   */
+  sources: PerplexityAgentSource[];
+}
